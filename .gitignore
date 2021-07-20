@@ -1,0 +1,5 @@
+# Excude JetBrains IDE config
+.idea
+
+# dependencies
+/node_modules
