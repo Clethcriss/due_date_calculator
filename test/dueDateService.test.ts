@@ -105,4 +105,12 @@ describe('Invalid Input', () => {
         const dueDateService = new DueDateService();
         expect(() => {dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)}).toThrow('Submit date value is null!');
     });
+
+    it('It should throw error with submit date {undefined}', () => {
+        const inputSubmitDate: Date = undefined;
+        const inputTurnaroundTime = 16;
+
+        const dueDateService = new DueDateService();
+        expect(() => {dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)}).toThrow('Submit date value is undefined!');
+    });
 });
