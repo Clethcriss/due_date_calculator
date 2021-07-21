@@ -54,6 +54,15 @@ describe('Proper input', () => {
         const dueDateService = new DueDateService();
         expect(dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)).toBe(expectedDueDate);
     });
+
+    it('It should calculate with submitDate: Monday 11:15, turnaround time: 2.6 hours', () => {
+        const inputSubmitDate: Date = new Date("October 11, 2021 11:15:00");
+        const inputTurnaroundTime: number = 2.6;
+
+        const expectedDueDate: Date = new Date("October 11, 2021 14:15:00");
+        const dueDateService = new DueDateService();
+        expect(dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)).toBe(expectedDueDate);
+    });
 });
 
 describe('Invalid Input', () => {
