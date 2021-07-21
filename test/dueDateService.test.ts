@@ -65,4 +65,13 @@ describe('Invalid Input', () => {
         const dueDateService = new DueDateService();
         expect(() => {dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)}).toThrow('Turnaround time value is lower or equal to zero!');
     });
+
+    it('It should throw error with turnaround time: {negative number} hours', () => {
+        const inputSubmitDate: Date = new Date("October 11, 2021 13:15:00");
+        const inputTurnaroundTime: number = -16;
+
+        const expectedDueDate: Date = new Date("October 19, 2021 14:15:00");
+        const dueDateService = new DueDateService();
+        expect(() => {dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)}).toThrow('Turnaround time value is lower or equal to zero!');
+    });
 });
