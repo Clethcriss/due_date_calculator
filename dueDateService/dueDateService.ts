@@ -16,3 +16,5 @@ class DueDateService implements IDueDateService {
     }
 }
 
+export default DueDateService;
+
