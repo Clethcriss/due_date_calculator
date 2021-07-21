@@ -113,4 +113,20 @@ describe('Invalid Input', () => {
         const dueDateService = new DueDateService();
         expect(() => {dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)}).toThrow('Submit date value is undefined!');
     });
+
+    it('It should throw error with submit date is earlier than 09:00 (9AM)', () => {
+        const inputSubmitDate: Date = new Date("October 11, 2021 08:15:00");
+        const inputTurnaroundTime = 16;
+
+        const dueDateService = new DueDateService();
+        expect(() => {dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)}).toThrow('Submit date is earlier than 9AM!');
+    });
+
+    it('It should throw error with submit date is later than 17:00 (5PM)', () => {
+        const inputSubmitDate: Date = new Date("October 11, 2021 18:15:00");
+        const inputTurnaroundTime = 16;
+
+        const dueDateService = new DueDateService();
+        expect(() => {dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)}).toThrow('Submit date is later than 5PM!');
+    });
 });
