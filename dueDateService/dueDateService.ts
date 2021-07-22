@@ -18,7 +18,7 @@ class DueDateService implements IDueDateService {
         const weekEndPeriod: number = 2 * 24 * oneHourInMilliseconds;
         const oneDayInHours: number = 24;
 
-        let initialDateInMilliseconds: number = submitDate.getTime();
+        let temporaryDateInMilliseconds: number = submitDate.getTime();
 
         let numberOfDaysTillDueDate: number = 0;
         let remainingHoursOfTurnaroundTime: number;
@@ -31,33 +31,40 @@ class DueDateService implements IDueDateService {
 
         if (actualDay + numberOfDaysTillDueDate > 5) {
             const daysTillWeekend = 6 - actualDay;
-            initialDateInMilliseconds += weekEndPeriod + (daysTillWeekend * oneDayInHours * oneHourInMilliseconds);
+            temporaryDateInMilliseconds += weekEndPeriod + (daysTillWeekend * oneDayInHours * oneHourInMilliseconds);
             numberOfDaysTillDueDate -= daysTillWeekend;
         }
 
         if (Math.floor(numberOfDaysTillDueDate / 5) > 0) {
             const numberOfWeeks: number = Math.floor(numberOfDaysTillDueDate / 5);
-            initialDateInMilliseconds += weekEndPeriod * numberOfWeeks;
+            temporaryDateInMilliseconds += weekEndPeriod * numberOfWeeks;
         }
 
-        initialDateInMilliseconds += numberOfDaysTillDueDate * oneDayInHours * oneHourInMilliseconds;
+        temporaryDateInMilliseconds += numberOfDaysTillDueDate * oneDayInHours * oneHourInMilliseconds;
 
         if (remainingHoursOfTurnaroundTime < remainingHoursTillEOD) {
-            initialDateInMilliseconds += oneHourInMilliseconds * remainingHoursOfTurnaroundTime;
+            temporaryDateInMilliseconds += oneHourInMilliseconds * remainingHoursOfTurnaroundTime;
         } else {
-            initialDateInMilliseconds += (16 + remainingHoursOfTurnaroundTime) * oneHourInMilliseconds;
+            temporaryDateInMilliseconds += (16 + remainingHoursOfTurnaroundTime) * oneHourInMilliseconds;
         }
 
+        temporaryDateInMilliseconds = this.handleSummerOrWinterTimeChange(submitDate, temporaryDateInMilliseconds);
+
+        return new Date(temporaryDateInMilliseconds);
+    }
+
+    private handleSummerOrWinterTimeChange(submitDate: Date, actualDateInMilliseconds: number): number {
+        const oneHourInMilliseconds: number = 3600000;
         const yearOfSubmit: number = submitDate.getFullYear();
         const summerToWinterTimeChangeDate: number = new Date(`October 31, ${yearOfSubmit} `).getTime();
         const winterToSummerTimeChangeDate: number = new Date(`March 28, ${yearOfSubmit} `).getTime();
-        if (submitDate.getTime() < summerToWinterTimeChangeDate && summerToWinterTimeChangeDate < initialDateInMilliseconds) {
-            initialDateInMilliseconds += oneHourInMilliseconds;
-        } else if (submitDate.getTime() < winterToSummerTimeChangeDate && winterToSummerTimeChangeDate > initialDateInMilliseconds) {
-            initialDateInMilliseconds -= oneHourInMilliseconds;
-        }
 
-        return new Date(initialDateInMilliseconds);
+        if (submitDate.getTime() < summerToWinterTimeChangeDate && summerToWinterTimeChangeDate < actualDateInMilliseconds) {
+            actualDateInMilliseconds += oneHourInMilliseconds;
+        } else if (submitDate.getTime() < winterToSummerTimeChangeDate && winterToSummerTimeChangeDate > actualDateInMilliseconds) {
+            actualDateInMilliseconds -= oneHourInMilliseconds;
+        }
+        return actualDateInMilliseconds;
     }
 }
 
