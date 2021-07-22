@@ -18,6 +18,8 @@ class DueDateService implements IDueDateService {
 
         if (submitDate === null) throw new Error('Submit date value is null!');
         if (submitDate === undefined) throw new Error('Submit date value is undefined!');
+        if (submitDate.getHours() < 9) throw new Error('Submit date is earlier than 9AM!');
+        if (submitDate.getHours() > 17) throw new Error('Submit date is later than 5PM!');
 
         turnaroundTime = Math.ceil(turnaroundTime);
 
