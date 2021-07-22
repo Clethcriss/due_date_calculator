@@ -15,6 +15,8 @@ class DueDateService implements IDueDateService {
         const oneHourInMilliseconds: number = 3600000;
         const remainingHoursTillEOD: number = 17 - submitDate.getHours();
         const actualDay: number = submitDate.getDay();
+        const weekEndPeriod: number = 2 * 24 * oneHourInMilliseconds;
+        const oneDayInHours: number = 24;
 
         let initialDateInMilliseconds: number = submitDate.getTime();
 
@@ -28,17 +30,28 @@ class DueDateService implements IDueDateService {
         }
 
         if (actualDay + numberOfDaysTillDueDate > 5) {
-            const daysTillWeekend = actualDay - 5;
-            initialDateInMilliseconds += (2 * 24 * oneHourInMilliseconds) + (daysTillWeekend * 24 * oneHourInMilliseconds);
-            numberOfDaysTillDueDate -= actualDay - 5;
+            const daysTillWeekend = 6 - actualDay;
+            initialDateInMilliseconds += weekEndPeriod + (daysTillWeekend * oneDayInHours * oneHourInMilliseconds);
+            numberOfDaysTillDueDate -= daysTillWeekend;
         }
 
-        initialDateInMilliseconds += numberOfDaysTillDueDate * 24 * oneHourInMilliseconds;
+        if (Math.floor(numberOfDaysTillDueDate / 5) > 0) {
+            const numberOfWeeks: number = Math.floor(numberOfDaysTillDueDate / 5);
+            initialDateInMilliseconds += weekEndPeriod * numberOfWeeks;
+        }
+
+        initialDateInMilliseconds += numberOfDaysTillDueDate * oneDayInHours * oneHourInMilliseconds;
 
         if (remainingHoursOfTurnaroundTime < remainingHoursTillEOD) {
             initialDateInMilliseconds += oneHourInMilliseconds * remainingHoursOfTurnaroundTime;
         } else {
             initialDateInMilliseconds += (16 + remainingHoursOfTurnaroundTime) * oneHourInMilliseconds;
+        }
+
+        const yearOfSubmit: number = submitDate.getFullYear();
+        const summerToWinterTimeChangeDate: number = new Date(`October 31, ${yearOfSubmit} `).getTime();
+        if (submitDate.getTime() < summerToWinterTimeChangeDate && summerToWinterTimeChangeDate < initialDateInMilliseconds) {
+            initialDateInMilliseconds += oneHourInMilliseconds;
         }
 
         return new Date(initialDateInMilliseconds);

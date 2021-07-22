@@ -65,10 +65,28 @@ describe('Proper input', () => {
     });
 
     it('It should calculate with submitDate: Monday 13:15, turnaround time: 129 hours', () => {
-        const inputSubmitDate: Date = new Date("October 11, 2021 13:15:00");
+        const inputSubmitDate: Date = new Date("August 9, 2021 13:15:00");
         const inputTurnaroundTime: number = 129;
 
-        const expectedDueDate: Date = new Date("November 3, 2021 14:15:00");
+        const expectedDueDate: Date = new Date("August 31, 2021 14:15:00");
+        const dueDateService = new DueDateService();
+        expect(dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)).toStrictEqual(expectedDueDate);
+    });
+
+    it('It should calculate with submitDate: Monday 13:15, turnaround time: 209 hours and Summer time to Winter time change.', () => {
+        const inputSubmitDate: Date = new Date("October 11, 2021 13:15:00");
+        const inputTurnaroundTime: number = 209;
+
+        const expectedDueDate: Date = new Date("November 16, 2021 14:15:00");
+        const dueDateService = new DueDateService();
+        expect(dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)).toStrictEqual(expectedDueDate);
+    });
+
+    it('It should calculate with submitDate: Monday 13:15, turnaround time: 57 hours and Winter time to Summer time change', () => {
+        const inputSubmitDate: Date = new Date("March 22, 2021 13:15:00");
+        const inputTurnaroundTime: number = 57;
+
+        const expectedDueDate: Date = new Date("November 31, 2021 14:15:00");
         const dueDateService = new DueDateService();
         expect(dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)).toStrictEqual(expectedDueDate);
     });
