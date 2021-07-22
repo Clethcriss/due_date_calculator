@@ -31,14 +31,9 @@ class DueDateService implements IDueDateService {
 
         let temporaryDateInMilliseconds: number = submitDate.getTime();
 
-        let numberOfDaysTillDueDate: number = 0;
-        let remainingHoursOfTurnaroundTime: number;
-        if (turnaroundTime >= 8) {
-            numberOfDaysTillDueDate = Math.floor(turnaroundTime / 8);
-            remainingHoursOfTurnaroundTime = turnaroundTime % 8;
-        } else {
-            remainingHoursOfTurnaroundTime = turnaroundTime;
-        }
+        let numberOfDaysTillDueDate: number = Math.floor(turnaroundTime / 8);
+        const remainingHoursOfTurnaroundTime: number = turnaroundTime % 8;
+
 
         if (actualDay + numberOfDaysTillDueDate > 5) {
             const daysTillWeekend = 6 - actualDay;
