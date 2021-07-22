@@ -16,6 +16,9 @@ class DueDateService implements IDueDateService {
         if (turnaroundTime === undefined) throw new Error('Turnaround time value is undefined!');
         if (turnaroundTime <= 0) throw new Error('Turnaround time value is lower or equal to zero!');
 
+        if (submitDate === null) throw new Error('Submit date value is null!');
+        if (submitDate === undefined) throw new Error('Submit date value is undefined!');
+
         turnaroundTime = Math.ceil(turnaroundTime);
 
         const oneHourInMilliseconds: number = 3600000;
