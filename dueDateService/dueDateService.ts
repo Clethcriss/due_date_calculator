@@ -64,6 +64,13 @@ class DueDateService implements IDueDateService {
         return new Date(temporaryDateInMilliseconds);
     }
 
+    /**
+     * Adjusts the given actualDateInMilliseconds if it passed winter or summer time change date
+     * since the submit date.
+     * @param submitDate
+     * @param actualDateInMilliseconds
+     * @private
+     */
     private handleSummerOrWinterTimeChange(submitDate: Date, actualDateInMilliseconds: number): number {
         const oneHourInMilliseconds: number = 3600000;
         const yearOfSubmit: number = submitDate.getFullYear();
