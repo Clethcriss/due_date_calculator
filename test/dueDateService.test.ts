@@ -86,7 +86,7 @@ describe('Proper input', () => {
         const inputSubmitDate: Date = new Date("March 22, 2021 13:15:00");
         const inputTurnaroundTime: number = 57;
 
-        const expectedDueDate: Date = new Date("November 31, 2021 14:15:00");
+        const expectedDueDate: Date = new Date("March 31, 2021 15:15:00");
         const dueDateService = new DueDateService();
         expect(dueDateService.calculateDueDate(inputSubmitDate, inputTurnaroundTime)).toStrictEqual(expectedDueDate);
     });

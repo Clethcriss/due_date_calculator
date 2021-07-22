@@ -50,8 +50,11 @@ class DueDateService implements IDueDateService {
 
         const yearOfSubmit: number = submitDate.getFullYear();
         const summerToWinterTimeChangeDate: number = new Date(`October 31, ${yearOfSubmit} `).getTime();
+        const winterToSummerTimeChangeDate: number = new Date(`March 28, ${yearOfSubmit} `).getTime();
         if (submitDate.getTime() < summerToWinterTimeChangeDate && summerToWinterTimeChangeDate < initialDateInMilliseconds) {
             initialDateInMilliseconds += oneHourInMilliseconds;
+        } else if (submitDate.getTime() < winterToSummerTimeChangeDate && winterToSummerTimeChangeDate > initialDateInMilliseconds) {
+            initialDateInMilliseconds -= oneHourInMilliseconds;
         }
 
         return new Date(initialDateInMilliseconds);
