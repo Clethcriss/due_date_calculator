@@ -12,6 +12,9 @@ class DueDateService implements IDueDateService {
      * @returns {Date} - due date
      */
     calculateDueDate(submitDate: Date, turnaroundTime: number): Date {
+
+        turnaroundTime = Math.ceil(turnaroundTime);
+
         const oneHourInMilliseconds: number = 3600000;
         const remainingHoursTillEOD: number = 17 - submitDate.getHours();
         const actualDay: number = submitDate.getDay();
