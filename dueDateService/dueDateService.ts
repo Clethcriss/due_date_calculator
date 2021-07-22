@@ -12,6 +12,8 @@ class DueDateService implements IDueDateService {
      * @returns {Date} - due date
      */
     calculateDueDate(submitDate: Date, turnaroundTime: number): Date {
+        if (turnaroundTime === null) throw new Error('Turnaround time value is null!');
+        if (turnaroundTime === undefined) throw new Error('Turnaround time value is undefined!');
         if (turnaroundTime <= 0) throw new Error('Turnaround time value is lower or equal to zero!');
 
         turnaroundTime = Math.ceil(turnaroundTime);
