@@ -14,8 +14,10 @@ class DueDateService implements IDueDateService {
     calculateDueDate(submitDate: Date, turnaroundTime: number): Date {
         const oneHourInMilliseconds: number = 3600000;
         const remainingHoursTillEOD: number = 17 - submitDate.getHours();
+        const actualDay: number = submitDate.getDay();
 
         let initialDateInMilliseconds: number = submitDate.getTime();
+
         let numberOfDaysTillDueDate: number = 0;
         let remainingHoursOfTurnaroundTime: number;
         if (turnaroundTime >= 8) {
@@ -23,6 +25,12 @@ class DueDateService implements IDueDateService {
             remainingHoursOfTurnaroundTime = turnaroundTime % 8;
         } else {
             remainingHoursOfTurnaroundTime = turnaroundTime;
+        }
+
+        if (actualDay + numberOfDaysTillDueDate > 5) {
+            const daysTillWeekend = actualDay - 5;
+            initialDateInMilliseconds += (2 * 24 * oneHourInMilliseconds) + (daysTillWeekend * 24 * oneHourInMilliseconds);
+            numberOfDaysTillDueDate -= actualDay - 5;
         }
 
         initialDateInMilliseconds += numberOfDaysTillDueDate * 24 * oneHourInMilliseconds;
