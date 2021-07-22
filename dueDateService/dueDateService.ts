@@ -41,10 +41,7 @@ class DueDateService implements IDueDateService {
             numberOfDaysTillDueDate -= daysTillWeekend;
         }
 
-        if (Math.floor(numberOfDaysTillDueDate / 5) > 0) {
-            const numberOfWeeks: number = Math.floor(numberOfDaysTillDueDate / 5);
-            temporaryDateInMilliseconds += weekEndPeriod * numberOfWeeks;
-        }
+        temporaryDateInMilliseconds = this.addWeekEndPeriod(numberOfDaysTillDueDate, temporaryDateInMilliseconds, weekEndPeriod);
 
         temporaryDateInMilliseconds += numberOfDaysTillDueDate * oneDayInHours * oneHourInMilliseconds;
 
@@ -60,10 +57,11 @@ class DueDateService implements IDueDateService {
     }
 
     /**
-     * Adjusts the given actualDateInMilliseconds if it passed winter or summer time change date
+     * Adjusts the given temporaryDateInMilliseconds if it passed winter or summer time change date
      * since the submit date.
      * @param submitDate
      * @param actualDateInMilliseconds
+     * @returns {Date} - temporaryDateInMilliseconds
      * @private
      */
     private handleSummerOrWinterTimeChange(submitDate: Date, actualDateInMilliseconds: number): number {
@@ -78,6 +76,22 @@ class DueDateService implements IDueDateService {
             actualDateInMilliseconds -= oneHourInMilliseconds;
         }
         return actualDateInMilliseconds;
+    }
+
+    /**
+     * Adds weekend period to temporaryDate if needed.
+     * @param numberOfDaysTillDueDate
+     * @param temporaryDateInMilliseconds
+     * @param weekEndPeriod
+     * @returns {Date} - temporaryDateInMilliseconds
+     * @private
+     */
+    private addWeekEndPeriod(numberOfDaysTillDueDate: number, temporaryDateInMilliseconds: number, weekEndPeriod: number): number {
+        if (Math.floor(numberOfDaysTillDueDate / 5) > 0) {
+            const numberOfWeeks: number = Math.floor(numberOfDaysTillDueDate / 5);
+            temporaryDateInMilliseconds += weekEndPeriod * numberOfWeeks;
+        }
+        return temporaryDateInMilliseconds;
     }
 }
 
