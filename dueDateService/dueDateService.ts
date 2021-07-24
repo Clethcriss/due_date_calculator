@@ -1,5 +1,6 @@
 export interface IDueDateService {
     calculateDueDate: (submitDate: Date, turnAroundTime: number) => Date;
+    calculateDueDate2: (submitDate: Date, turnAroundTime: number) => Date;
 }
 
 class DueDateService implements IDueDateService {
@@ -11,7 +12,7 @@ class DueDateService implements IDueDateService {
      * @param turnaroundTime
      * @returns {Date} - due date
      */
-    calculateDueDate(submitDate: Date, turnaroundTime: number): Date {
+    calculateDueDate2(submitDate: Date, turnaroundTime: number): Date {
         if (turnaroundTime === null) throw new Error('Turnaround time value is null!');
         if (turnaroundTime === undefined) throw new Error('Turnaround time value is undefined!');
         if (turnaroundTime <= 0) throw new Error('Turnaround time value is lower or equal to zero!');
@@ -49,6 +50,43 @@ class DueDateService implements IDueDateService {
             temporaryDateInMilliseconds += oneHourInMilliseconds * remainingHoursOfTurnaroundTime;
         } else {
             temporaryDateInMilliseconds += (16 + remainingHoursOfTurnaroundTime) * oneHourInMilliseconds;
+        }
+
+        temporaryDateInMilliseconds = this.handleSummerOrWinterTimeChange(submitDate, temporaryDateInMilliseconds);
+
+        return new Date(temporaryDateInMilliseconds);
+    }
+
+    public calculateDueDate(submitDate: Date, turnaroundTime: number): Date{
+        if (turnaroundTime === null) throw new Error('Turnaround time value is null!');
+        if (turnaroundTime === undefined) throw new Error('Turnaround time value is undefined!');
+        if (turnaroundTime <= 0) throw new Error('Turnaround time value is lower or equal to zero!');
+
+        if (submitDate === null) throw new Error('Submit date value is null!');
+        if (submitDate === undefined) throw new Error('Submit date value is undefined!');
+        if (submitDate.getHours() < 9) throw new Error('Submit date is earlier than 9AM!');
+        if (submitDate.getHours() > 17) throw new Error('Submit date is later than 5PM!');
+
+        turnaroundTime = Math.ceil(turnaroundTime);
+        let actualDay: number = submitDate.getDay();
+
+        const oneHourInMilliseconds: number = 3600000;
+        const weekEndPeriod: number = 2 * 24 * oneHourInMilliseconds;
+
+        let temporaryDateInMilliseconds: number = submitDate.getTime();
+
+        for (let iterator = 0; iterator < turnaroundTime; iterator++) {
+            temporaryDateInMilliseconds += oneHourInMilliseconds;
+            if (new Date(temporaryDateInMilliseconds).getHours() >= 17) {
+                temporaryDateInMilliseconds += 16 * oneHourInMilliseconds;
+                actualDay++;
+            }
+
+
+            if (actualDay > 5) {
+                actualDay = 1;
+                temporaryDateInMilliseconds += weekEndPeriod;
+            }
         }
 
         temporaryDateInMilliseconds = this.handleSummerOrWinterTimeChange(submitDate, temporaryDateInMilliseconds);
