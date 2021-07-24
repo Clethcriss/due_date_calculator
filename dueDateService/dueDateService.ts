@@ -70,7 +70,9 @@ class DueDateService implements IDueDateService {
         const summerToWinterTimeChangeDate: number = new Date(`October 31, ${yearOfSubmit} `).getTime();
         const winterToSummerTimeChangeDate: number = new Date(`March 28, ${yearOfSubmit} `).getTime();
 
-        if (submitDate.getTime() < summerToWinterTimeChangeDate && summerToWinterTimeChangeDate < actualDateInMilliseconds) {
+        if (submitDate.getTime() < winterToSummerTimeChangeDate && summerToWinterTimeChangeDate < actualDateInMilliseconds) {
+            return actualDateInMilliseconds;
+        } else if (submitDate.getTime() < summerToWinterTimeChangeDate && summerToWinterTimeChangeDate < actualDateInMilliseconds) {
             actualDateInMilliseconds += oneHourInMilliseconds;
         } else if (submitDate.getTime() < winterToSummerTimeChangeDate && winterToSummerTimeChangeDate > actualDateInMilliseconds) {
             actualDateInMilliseconds -= oneHourInMilliseconds;
