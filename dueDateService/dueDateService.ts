@@ -1,6 +1,6 @@
 export interface IDueDateService {
     calculateDueDate: (submitDate: Date, turnAroundTime: number) => Date;
-    calculateDueDate2: (submitDate: Date, turnAroundTime: number) => Date;
+    postSubmitCalculateDueDate: (submitDate: Date, turnAroundTime: number) => Date;
 }
 
 class DueDateService implements IDueDateService {
@@ -12,7 +12,7 @@ class DueDateService implements IDueDateService {
      * @param turnaroundTime
      * @returns {Date} - due date
      */
-    calculateDueDate2(submitDate: Date, turnaroundTime: number): Date {
+    calculateDueDate(submitDate: Date, turnaroundTime: number): Date {
         if (turnaroundTime === null) throw new Error('Turnaround time value is null!');
         if (turnaroundTime === undefined) throw new Error('Turnaround time value is undefined!');
         if (turnaroundTime <= 0) throw new Error('Turnaround time value is lower or equal to zero!');
@@ -57,7 +57,7 @@ class DueDateService implements IDueDateService {
         return new Date(temporaryDateInMilliseconds);
     }
 
-    public calculateDueDate(submitDate: Date, turnaroundTime: number): Date{
+    public postSubmitCalculateDueDate(submitDate: Date, turnaroundTime: number): Date{
         if (turnaroundTime === null) throw new Error('Turnaround time value is null!');
         if (turnaroundTime === undefined) throw new Error('Turnaround time value is undefined!');
         if (turnaroundTime <= 0) throw new Error('Turnaround time value is lower or equal to zero!');
