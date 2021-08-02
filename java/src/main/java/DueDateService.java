@@ -2,7 +2,7 @@ import java.util.Date;
 import java.util.Calendar;
 
 public class DueDateService implements IDueDateService {
-    private DueDateService instance = null;
+    private static DueDateService instance = null;
 
     public IDueDateService DueDateService() {
         if (instance == null) {
@@ -44,5 +44,13 @@ public class DueDateService implements IDueDateService {
         }
 
         return actualCalendar.getTime();
+    }
+
+    private void inputDateCheck(Date inputDate) throws Error {
+        if (inputDate == null) throw new Error("Submit date value is null!");
+        final Calendar checkCalendar = Calendar.getInstance();
+        checkCalendar.setTime(inputDate);
+        if (checkCalendar.get(Calendar.HOUR) < 9) throw new Error("Submit date is earlier than 9AM!");
+        if (checkCalendar.get(Calendar.HOUR) >= 17) throw new Error("Submit date is later than 5PM!");
     }
 }
