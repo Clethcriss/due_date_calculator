@@ -58,14 +58,8 @@ class DueDateService implements IDueDateService {
     }
 
     public postSubmitCalculateDueDate(submitDate: Date, turnaroundTime: number): Date{
-        if (turnaroundTime === null) throw new Error('Turnaround time value is null!');
-        if (turnaroundTime === undefined) throw new Error('Turnaround time value is undefined!');
-        if (turnaroundTime <= 0) throw new Error('Turnaround time value is lower or equal to zero!');
-
-        if (submitDate === null) throw new Error('Submit date value is null!');
-        if (submitDate === undefined) throw new Error('Submit date value is undefined!');
-        if (submitDate.getHours() < 9) throw new Error('Submit date is earlier than 9AM!');
-        if (submitDate.getHours() > 17) throw new Error('Submit date is later than 5PM!');
+        this.inputTimeCheck(turnaroundTime);
+        this.inputDateCheck(submitDate);
 
         turnaroundTime = Math.ceil(turnaroundTime);
         let actualDay: number = submitDate.getDay();
@@ -132,6 +126,19 @@ class DueDateService implements IDueDateService {
             temporaryDateInMilliseconds += weekEndPeriod * numberOfWeeks;
         }
         return temporaryDateInMilliseconds;
+    }
+
+    private inputDateCheck(inputDate: Date): void {
+        if (inputDate === null) throw new Error('Submit date value is null!');
+        if (inputDate === undefined) throw new Error('Submit date value is undefined!');
+        if (inputDate.getHours() < 9) throw new Error('Submit date is earlier than 9AM!');
+        if (inputDate.getHours() > 17) throw new Error('Submit date is later than 5PM!');
+    }
+
+    private inputTimeCheck(inputTime: number): void {
+        if (inputTime === null) throw new Error('Turnaround time value is null!');
+        if (inputTime === undefined) throw new Error('Turnaround time value is undefined!');
+        if (inputTime <= 0) throw new Error('Turnaround time value is lower or equal to zero!');
     }
 }
 
